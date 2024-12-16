@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Local Internet Speed Test</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Internet Speed Test</h1>
+        <button id="startTest">Start Test</button>
+        <div class="results">
+            <p>Ping: <span id="ping">--</span> ms</p>
+            <p>Download Speed: <span id="download">--</span> Mbps</p>
+            <p>Upload Speed: <span id="upload">--</span> Mbps</p>
+        </div>
+    </div>
+    <script>
+        document.getElementById('startTest').addEventListener('click', async () => {
+            const ping = document.getElementById('ping');
+            const download = document.getElementById('download');
+            const upload = document.getElementById('upload');
+
+            // Reset the results
+            ping.textContent = '--';
+            download.textContent = '--';
+            upload.textContent = '--';
+
+            try {
+                const response = await fetch('/speedtest');
+                const data = await response.json();
+
+                ping.textContent = data.ping;
+                download.textContent = data.download_speed;
+                upload.textContent = data.upload_speed;
+            } catch (error) {
+                alert('Error fetching speed test data');
+                console.error(error);
+            }
+        });
+    </script>
+</body>
+</html>
